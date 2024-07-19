@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess App</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+<div class="row">
+<div class="col-md-8 offset-md-2">
+<h1>Chess</h1>
+
+<div id="board"></div>
+
+<form id="move-form">
+<div class="form-group">
+<label for="move">Move:</label>
+<input type="text" class="form-control" id="move">
+</div>
+<button type="submit" class="btn btn-primary">Move</button>
+</form>
+</div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+// Initialize the chessboard
+var board = Chessboard('board');
+
+// Handle move submissions
+$('#move-form').submit(function(e) {
+e.preventDefault();
+
+var move = $('#move').val();
+
+// Send the move to the server
+$.ajax({
+url: '/api/move',
+method: 'POST',
+data: JSON.stringify({
+move: move
+}),
+contentType: 'application/json',
+success: function(data) {
+// Update the chessboard with the new board state
+board.position(data.board);
+}
+});
+});
+});
+</script>
+</body>
+
+</html>
+
